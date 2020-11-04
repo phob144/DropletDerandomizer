@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="osu.Game">
+      <HintPath>..\..\..\..\..\AppData\Local\osulazer\app-2020.1031.0\osu.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="osu.Game.Rulesets.Catch">
+      <HintPath>..\..\..\..\..\AppData\Local\osulazer\app-2020.1031.0\osu.Game.Rulesets.Catch.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
