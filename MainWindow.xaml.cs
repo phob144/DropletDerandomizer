@@ -14,12 +14,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Microsoft.Win32;
 using DropletDerandomizer.Osu;
-using osu.Game;
 using osu.Game.Rulesets.Catch.Beatmaps;
-using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Catch.Objects;
 using osu.Game.Rulesets.Catch;
 using System.Reflection;
+using OsuParsers.Beatmaps;
+using OsuParsers.Decoders;
 
 namespace DropletDerandomizer
 {
@@ -58,9 +58,15 @@ namespace DropletDerandomizer
 
         private void derandomizeButton_Click(object sender, RoutedEventArgs e)
         {
-            CatchBeatmap c = BeatmapOperator.Decode(beatmapPathTextBox.Text);
+            //CatchBeatmap beatmap = BeatmapOperator.Decode(beatmapPathTextBox.Text);
 
-            MessageBox.Show(string.Join(", ", c.HitObjects[0].NestedHitObjects.Select(x => (x as CatchHitObject).X)));
+            //MessageBox.Show(string.Join(" ||| ", beatmap.HitObjects[0].NestedHitObjects.Select(x => x.StartTime)));
+
+            Beatmap derandomized = BeatmapOperator.DerandomizeDroplets(beatmapPathTextBox.Text);
+
+            derandomized.Write(beatmapPathTextBox.Text);
+
+            MessageBox.Show("Done");
         }
     }
 }

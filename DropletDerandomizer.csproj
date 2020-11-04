@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="OsuParsers" Version="1.6.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="osu.Game">
       <HintPath>..\..\..\..\..\AppData\Local\osulazer\app-2020.1031.0\osu.Game.dll</HintPath>
     </Reference>
