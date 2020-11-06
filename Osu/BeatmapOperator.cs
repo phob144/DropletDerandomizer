@@ -11,6 +11,7 @@ using System.Linq;
 using DropletDerandomizer.Exstensions;
 using System.Numerics;
 using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace DropletDerandomizer.Osu
 {
@@ -20,18 +21,15 @@ namespace DropletDerandomizer.Osu
         {
             // used to determine droplets' positions
             CatchBeatmap catchBeatmap = Decode(path);
-            // used for operations on the map's sliders and writing. didn't have the sanity to work with 20 different hitobject classes in lazer libraries
+            // used for operations on the map's sliders and writing. i don't have the sanity to work with 20 different hitobject classes in lazer libraries
             Beatmap beatmap = BeatmapDecoder.Decode(path);
 
-            // create a green line for each red line
-            beatmap.TimingPoints.AssignInherited();
+            // create a green line for each red line before separating them
+            beatmap.TimingPoints.AssignInheritedPoints();
 
-            // give more room for droplet adjustments, gonna make it better in the future
-            beatmap.TimingPoints.ForEach(x =>
-            {
-                if (!x.Inherited)
-                    x.BeatLength /= 2;
-            });
+            // separate green lines from red lines because OsuParsers doesn't support that
+            List<TimingPoint> greenLines = beatmap.TimingPoints.FindAll(x => !x.Inherited);
+            List<TimingPoint> redLines = beatmap.TimingPoints.FindAll(x => x.Inherited);
 
             List<SliderInfo> derandomizedSliderInfo = new List<SliderInfo>();
 
@@ -39,6 +37,7 @@ namespace DropletDerandomizer.Osu
             {
                 var hitObject = catchBeatmap.HitObjects[i];
 
+                // we don't care about fruits or spinners
                 if (!(hitObject is JuiceStream))
                     continue;
 
@@ -48,13 +47,13 @@ namespace DropletDerandomizer.Osu
                 {
                     var catchObj = nested as CatchHitObject;
 
-                    // reflection, because xOffset is internal
+                    // using reflection, because peppy is trying to hide his sins by making xOffset internal
                     double xOffset = (float)typeof(CatchHitObject).GetProperty("XOffset", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(catchObj);
-
-#warning if catchObj.X - xOffset doesn't work correctly, try catchObj.X + xOffset
 
                     sliderInfo.NestedObjects.Add(new NestedObjectInfo
                     {
+                        // subtracting xOffset for the first time returns the x position on the original slider path at this time
+                        // subtracting it for the second time moves the droplet to the original slider's path
                         X = catchObj.X - 2 * xOffset,
                         StartTime = catchObj.StartTime
                     });
@@ -63,24 +62,38 @@ namespace DropletDerandomizer.Osu
                 derandomizedSliderInfo.Add(sliderInfo);
             }
 
-            foreach (var slider in derandomizedSliderInfo)
-            {
-                if (slider.BaseSlider.Repeats > 1)
-                    continue;
+            // give more room for droplet adjustments, create a list of multipliers parallel to green lines
+            List<double> multipliers = 
+                greenLines.Select(
+                    x => x.GetLowestRequiredSVMultiplier(redLines.GetFirstLowerOrEqual(x.Offset, y => y.Offset),
+                    beatmap.DifficultySection.SliderMultiplier))
+                .ToList();
 
-                beatmap.DerandomizeAndReplace(slider);
+            // apply the multiplier to all green lines. dividing, because BeatLength is unconverted (-100 / SV)
+            beatmap.TimingPoints.ForEach(x =>
+            {
+                if (!x.Inherited)
+                    x.BeatLength /= multipliers[greenLines.FindIndex(y => y.Offset == x.Offset)];
+            });
+
+            for (int i = 0; i < derandomizedSliderInfo.Count; i++)
+            {
+                var slider = derandomizedSliderInfo[i];
+                var multiplier = multipliers[greenLines.IndexOf(greenLines.GetFirstLowerOrEqual(slider.BaseSlider.StartTime, x => x.Offset))];
+
+                beatmap.DerandomizeAndReplace(slider, multiplier);
             }
 
             return beatmap;
         }
 
-        private static void DerandomizeAndReplace(this Beatmap beatmap, SliderInfo sliderInfo)
+        private static void DerandomizeAndReplace(this Beatmap beatmap, SliderInfo sliderInfo, double multiplier)
         {
             Slider baseSlider = sliderInfo.BaseSlider;
-            // BRUTE FORCE DEBUG
-            baseSlider.PixelLength *= 2;
 
-            // -100 -> 1x SV
+            // apply the SV multiplier to slider length
+            baseSlider.PixelLength *= multiplier;
+
             TimingPoint greenLine = beatmap.TimingPoints.FindAll(x => !x.Inherited).GetFirstLowerOrEqual(baseSlider.StartTime, x => x.Offset);
             TimingPoint redLine = beatmap.TimingPoints.FindAll(x => x.Inherited).GetFirstLowerOrEqual(baseSlider.StartTime, x => x.Offset);
 
@@ -90,7 +103,7 @@ namespace DropletDerandomizer.Osu
             List<Vector2> sliderPoints = baseSlider.SliderPoints;
             sliderPoints.Clear();
 
-            // the direction the slider is supposed to go on the y axis. for readability's sake
+            // the direction the slider is supposed to go on the y axis. for readability
             int yMultiplier = 1;
 
             // skipping one, because it's the slider head
@@ -98,19 +111,21 @@ namespace DropletDerandomizer.Osu
             {
                 Vector2 lastNodePos = sliderPoints.LastOrDefault();
 
+                // if there are no elements in the list, it means we are at the first droplet. in this case, take the slider head's position as lastNodePos
                 if (sliderPoints.Count == 0)
                     lastNodePos = baseSlider.Position;
 
-                // used for calculating yOffset 2 lines later
-                double xOffset = nested.X - lastNodePos.X;
-
+                // https://osu.ppy.sh/help/wiki/osu!_File_Formats/Osu_(file_format)#sliders changed to return the pixel length instead
                 double nestedLength = -10000 * (nested.StartTime - sliderInfo.NestedObjects[sliderInfo.NestedObjects.IndexOf(nested) - 1].StartTime) * beatmap.DifficultySection.SliderMultiplier / (redLine.BeatLength * greenLine.BeatLength);
+
+                // used for calculating yOffset
+                double xOffset = nested.X - lastNodePos.X;
 
                 // x^2 + y^2 = len^2; y^2 = len^2 - x^2; y = sqrt(len^2 - x^2)
                 double yOffset = Math.Sqrt((nestedLength * nestedLength) - (xOffset * xOffset));
 
                 // change the direction if about to go out of bounds
-                if (lastNodePos.Y > 512 || lastNodePos.Y < 0)
+                if ((lastNodePos.Y + yOffset >= 386 && yMultiplier == 1) || (lastNodePos.Y - yOffset <= 0 && yMultiplier == -1))
                     yMultiplier *= -1;
 
                 double x = nested.X;
@@ -125,7 +140,23 @@ namespace DropletDerandomizer.Osu
             beatmap.HitObjects[beatmap.HitObjects.FindIndex(x => x.StartTime == baseSlider.StartTime)] = baseSlider;
         }
 
-        private static void AssignInherited(this List<TimingPoint> timingPoints)
+        private static double GetLowestRequiredSVMultiplier(this TimingPoint greenLine, TimingPoint redLine, double sliderMultiplier)
+        {
+            double timeBetweenDroplets = redLine.BeatLength;
+
+            // droplet density calculation from osu!lazer source code
+            while (timeBetweenDroplets > 100)
+                timeBetweenDroplets /= 2;
+
+            // https://osu.ppy.sh/help/wiki/osu!_File_Formats/Osu_(file_format)#sliders changed to return the pixel length instead
+            double length = -10000 * timeBetweenDroplets * sliderMultiplier / (redLine.BeatLength * greenLine.BeatLength);
+
+            // xOffset's range is [-20,20], so the furthest the droplets can be offset from each other is 40px
+            // add 0.2 to make up for floating point errors
+            return ((length + 40) / length) + 0.2;
+        }
+
+        private static void AssignInheritedPoints(this List<TimingPoint> timingPoints)
         {
             List<TimingPoint> filtered = timingPoints.FindAll(x => x.Inherited);
 

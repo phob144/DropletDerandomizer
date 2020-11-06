@@ -58,9 +58,11 @@ namespace DropletDerandomizer
 
         private void derandomizeButton_Click(object sender, RoutedEventArgs e)
         {
-            //CatchBeatmap beatmap = BeatmapOperator.Decode(beatmapPathTextBox.Text);
-
-            //MessageBox.Show(string.Join(" ||| ", beatmap.HitObjects[0].NestedHitObjects.Select(x => x.StartTime)));
+            if (!File.Exists(beatmapPathTextBox.Text))
+            {
+                MessageBox.Show("Invalid file", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             Beatmap derandomized = BeatmapOperator.DerandomizeDroplets(beatmapPathTextBox.Text);
 

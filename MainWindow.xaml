@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:DropletDerandomizer"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="osu!catch Droplet Derandomizer" Height="300" Width="550">
+        Title="osu!catch Droplet Derandomizer" Height="200" Width="500"
+        SizeToContent="Height">
     <Window.Resources>
         <GridLength x:Key="BaseSize">40</GridLength>
         <Thickness x:Key="BaseMargin">5</Thickness>
@@ -18,7 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="{StaticResource BaseSize}"/>
             <RowDefinition Height="{StaticResource BaseSize}"/>
-            <RowDefinition Height="{StaticResource BaseSize}"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -47,33 +48,6 @@
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0" Margin="{StaticResource BaseMargin}"
-                       VerticalAlignment="Center">
-                Repeat slider positioning mode
-            </TextBlock>
-
-            <ComboBox Name="derandomizeRepeatsComboBox"
-                      Grid.Column="1" Margin="{StaticResource BaseMargin}" Padding="{StaticResource BaseMargin}"
-                      VerticalContentAlignment="Center"
-                      SelectedIndex="0">
-                <ComboBoxItem>
-                    Try finding the closest droplet position for all repeats
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    Find the exact position for the first slide
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    Ignore all repeat sliders
-                </ComboBoxItem>
-            </ComboBox>
-        </Grid>
-
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
@@ -85,5 +59,11 @@
                 Derandomize
             </Button>
         </Grid>
+
+        <TextBlock Grid.Row="2"
+                   Margin="5" TextWrapping="Wrap">
+            Do not use this program on an already derandomized diff, as it will give a completely opposite effect.
+            Make any changes only on the original difficulty.
+        </TextBlock>
     </Grid>
 </Window>
