@@ -1,5 +1,8 @@
-This should be good to use now.
+**You need [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) in order to run this program**
 
-There is no exception handling yet, but the program has only 2 buttons, so I hope you're smart enough to not break it.
+### How to install
+- Download the latest version [here](https://github.com/Phob144/DropletDerandomizer/releases)
+- Unpack the file and place it anywhere on your PC
+- If you don't have .NET Core 3.1 yet, install it [here](https://dotnet.microsoft.com/download/dotnet-core/3.1)
 
-Please don't insult my code at least it somewhat works
+Libraries from [the osu!lazer project](https://github.com/ppy/osu) were used for this program
