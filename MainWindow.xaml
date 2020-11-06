@@ -62,8 +62,13 @@
 
         <TextBlock Grid.Row="2"
                    Margin="5" TextWrapping="Wrap">
-            Do not use this program on an already derandomized diff, as it will give a completely opposite effect.
-            Make any changes only on the original difficulty.
+            <Bold>Do not use this program on an already derandomized diff, as it will give a completely opposite effect.</Bold>
+            <LineBreak/>
+            <Bold>Make changes only in the original difficulty.</Bold>
+            <LineBreak/>
+            <LineBreak/>
+            Some of the sliders' tails might be unsnapped in the derandomized diff due to rounding errors. It most likely will be fixed in the future.
+            For now, check AiMod and fix them manually.
         </TextBlock>
     </Grid>
 </Window>

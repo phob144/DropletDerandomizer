@@ -4,6 +4,11 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <Version>0.1.0</Version>
+    <Authors>Phob</Authors>
+    <PackageIcon></PackageIcon>
+    <PackageProjectUrl>https://github.com/Phob144/DropletDerandomizer</PackageProjectUrl>
+    <ApplicationIcon>C:\Users\TheAngry\Desktop\dropderando.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

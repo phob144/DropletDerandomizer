@@ -84,6 +84,9 @@ namespace DropletDerandomizer.Osu
                 beatmap.DerandomizeAndReplace(slider, multiplier);
             }
 
+            // rename the difficulty
+            beatmap.MetadataSection.Version += " (derandomized)";
+
             return beatmap;
         }
 

@@ -66,7 +66,9 @@ namespace DropletDerandomizer
 
             Beatmap derandomized = BeatmapOperator.DerandomizeDroplets(beatmapPathTextBox.Text);
 
-            derandomized.Write(beatmapPathTextBox.Text);
+            derandomized.Write(Path.GetDirectoryName(
+                beatmapPathTextBox.Text) + @"\" +
+                $"{derandomized.MetadataSection.Artist} - {derandomized.MetadataSection.Title} ({derandomized.MetadataSection.Creator}) [{derandomized.MetadataSection.Version}].osu");
 
             MessageBox.Show("Done");
         }
