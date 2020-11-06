@@ -6,3 +6,5 @@
 - If you don't have .NET Core 3.1 yet, download it [here](https://dotnet.microsoft.com/download/dotnet-core/3.1)
 
 Libraries from [the osu!lazer project](https://github.com/ppy/osu) were used for this program
+
+Still under heavy development.
