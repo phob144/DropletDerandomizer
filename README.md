@@ -1,3 +1,5 @@
+# DO NOT DELETE THE ORIGINAL DIFFICULTY!!! LEAVE IT TO APPLY ANY CHANGES, AS THE DERANDOMIZED DIFF IS VERY EASY TO RUIN BY MAKING SMALL CHANGES
+
 **You need [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) in order to run this program**
 
 ### How to install
