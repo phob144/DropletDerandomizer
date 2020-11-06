@@ -3,7 +3,7 @@
 ### How to install
 - Download the latest version [here](https://github.com/Phob144/DropletDerandomizer/releases)
 - Unpack the file and place it anywhere on your PC
-- Run the program by starting DropletDerandomizer.exe
+- Run the program by starting DropletDerandomizer.exe (hope i didn't forget to put it here lol)
 
 Libraries from [the osu!lazer project](https://github.com/ppy/osu) were used for this program
 
