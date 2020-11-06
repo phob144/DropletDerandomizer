@@ -8,7 +8,7 @@ using osu.Game.Rulesets.Catch.Beatmaps;
 using osu.Game.Rulesets.Catch.Objects;
 using OsuParsers.Beatmaps.Objects;
 using System.Linq;
-using DropletDerandomizer.Exstensions;
+using DropletDerandomizer.Extensions;
 using System.Numerics;
 using System.Data;
 using System.Runtime.CompilerServices;
