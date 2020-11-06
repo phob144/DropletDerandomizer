@@ -7,6 +7,6 @@
 - Unpack the file and place it anywhere on your PC
 - Run the program by starting DropletDerandomizer.exe (hope i didn't forget to put it here lol)
 
-Libraries from [the osu!lazer project](https://github.com/ppy/osu) were used for this program
+Libraries from [the osu!lazer project](https://github.com/ppy/osu) were used for this program as well as [OsuParsers](https://github.com/mrflashstudio/OsuParsers/)
 
 Still under heavy development.
