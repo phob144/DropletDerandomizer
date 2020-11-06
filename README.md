@@ -1,4 +1,5 @@
-This is not suitable for use yet, as it has way too many bugs, like:
-- Glitching out repeating sliders
-- Huge rounding errors leading to bad snapping
-etc.
+This should be good to use now.
+
+There is no exception handling yet, but the program has only 2 buttons, so I hope you're smart enough to not break it.
+
+Better handling of repeat sliders soon tm
