@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,9 +66,16 @@ namespace DropletDerandomizer
 
             Beatmap derandomized = BeatmapOperator.DerandomizeDroplets(beatmapPathTextBox.Text);
 
-            derandomized.Write(Path.GetDirectoryName(
-                beatmapPathTextBox.Text) + @"\" +
-                $"{derandomized.MetadataSection.Artist} - {derandomized.MetadataSection.Title} ({derandomized.MetadataSection.Creator}) [{derandomized.MetadataSection.Version}].osu");
+            string filePath = $"{derandomized.MetadataSection.Artist} - {derandomized.MetadataSection.Title} ({derandomized.MetadataSection.Creator}) [{derandomized.MetadataSection.Version}].osu";
+
+            // replace illegal characters with an empty string like osu does, taken from https://stackoverflow.com/questions/146134/how-to-remove-illegal-characters-from-path-and-filenames
+            filePath = string.Join("", filePath.Split(Path.GetInvalidFileNameChars()));
+
+            // specify the directory and write the beatmap
+            derandomized.Write(
+                Path.GetDirectoryName(beatmapPathTextBox.Text)
+                + @"\"
+                + filePath);
 
             MessageBox.Show("Done");
         }
