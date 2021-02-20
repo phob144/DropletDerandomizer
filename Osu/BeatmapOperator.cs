@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
@@ -17,7 +17,8 @@ namespace DropletDerandomizer.Osu
 {
     public static partial class BeatmapOperator
     {
-        public static Beatmap DerandomizeDroplets(string path)
+        // derandomizationRate = 0-20, used to determine the maximum offset reduction (the higher it is, the smoother the sliders will be)
+        public static Beatmap DerandomizeDroplets(string path, double derandomizationRate)
         {
             // used to determine droplets' positions
             CatchBeatmap catchBeatmap = Decode(path);
@@ -53,8 +54,8 @@ namespace DropletDerandomizer.Osu
                     sliderInfo.NestedObjects.Add(new NestedObjectInfo
                     {
                         // subtracting xOffset for the first time returns the x position on the original slider path at this time
-                        // subtracting it for the second time moves the droplet to the original slider's path
-                        X = catchObj.X - 2 * xOffset,
+                        // subtracting it for the second time with derandomizationRate applied moves the droplet closer to the original slider's path
+                        X = catchObj.X - xOffset - xOffset * derandomizationRate / 20,
                         StartTime = catchObj.StartTime
                     });
                 }
@@ -63,7 +64,7 @@ namespace DropletDerandomizer.Osu
             }
 
             // give more room for droplet adjustments, create a list of multipliers parallel to green lines
-            List<double> multipliers = 
+            List<double> multipliers =
                 greenLines.Select(
                     x => x.GetLowestRequiredSVMultiplier(redLines.GetFirstLowerOrEqual(x.Offset, y => y.Offset),
                     beatmap.DifficultySection.SliderMultiplier))
@@ -163,7 +164,7 @@ namespace DropletDerandomizer.Osu
         {
             List<TimingPoint> filtered = timingPoints.FindAll(x => x.Inherited);
 
-            filtered.ForEach(x => 
+            filtered.ForEach(x =>
             {
                 if (timingPoints.Find(y => !y.Inherited && y.Offset == x.Offset) == null)
                     timingPoints.Insert(timingPoints.IndexOf(x), new TimingPoint
