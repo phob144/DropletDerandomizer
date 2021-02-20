@@ -56,6 +56,12 @@ namespace DropletDerandomizer
             beatmapPathTextBox.Text = fileDialog.FileName;
         }
 
+        private void derandomizationRateSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            // update the textblock
+            derandomizationRateTextBlock.Text = derandomizationRateSlider.Value.ToString();
+        }
+
         private void derandomizeButton_Click(object sender, RoutedEventArgs e)
         {
             if (!File.Exists(beatmapPathTextBox.Text))
@@ -64,7 +70,7 @@ namespace DropletDerandomizer
                 return;
             }
 
-            Beatmap derandomized = BeatmapOperator.DerandomizeDroplets(beatmapPathTextBox.Text);
+            Beatmap derandomized = BeatmapOperator.DerandomizeDroplets(beatmapPathTextBox.Text, derandomizationRateSlider.Value);
 
             string filePath = $"{derandomized.MetadataSection.Artist} - {derandomized.MetadataSection.Title} ({derandomized.MetadataSection.Creator}) [{derandomized.MetadataSection.Version}].osu";
 
