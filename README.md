@@ -1,6 +1,6 @@
 # DO NOT DELETE THE ORIGINAL DIFFICULTY! LEAVE IT TO APPLY ANY CHANGES, AS THE DERANDOMIZED DIFF IS VERY EASY TO MESS UP BY MAKING SMALL CHANGES AND WON'T WORK IF YOU RUN THE DERANDOMIZER ON IT AGAIN
 
-**You need [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) in order to run this program**
+**You need [.NET Core SDK 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) in order to run this program**
 
 ### How to install
 - Download the latest version [here](https://github.com/Phob144/DropletDerandomizer/releases)
