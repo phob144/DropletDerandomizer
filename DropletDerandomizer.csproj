@@ -4,6 +4,10 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>dropderando.ico</ApplicationIcon>
+    <Version>0.2.1</Version>
+    <Authors>Phob</Authors>
+    <Company>Phob</Company>
   </PropertyGroup>
 
   <ItemGroup>
