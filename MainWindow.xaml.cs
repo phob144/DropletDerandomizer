@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.IO;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,7 +79,7 @@ namespace DropletDerandomizer
             filePath = string.Join("", filePath.Split(Path.GetInvalidFileNameChars()));
 
             // specify the directory and write the beatmap
-            derandomized.Write(
+            derandomized.Save(
                 Path.GetDirectoryName(beatmapPathTextBox.Text)
                 + @"\"
                 + filePath);

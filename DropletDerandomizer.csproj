@@ -1,26 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <Version>0.2.0</Version>
-    <Authors>Phob</Authors>
-    <PackageIcon></PackageIcon>
-    <PackageProjectUrl>https://github.com/Phob144/DropletDerandomizer</PackageProjectUrl>
-    <ApplicationIcon>C:\Users\TheAngry\Desktop\dropderando.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OsuParsers" Version="1.6.5" />
+    <PackageReference Include="OsuParsers" Version="1.7.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="osu.Game">
-      <HintPath>..\..\..\..\..\AppData\Local\osulazer\app-2020.1031.0\osu.Game.dll</HintPath>
+      <HintPath>..\DLLs\osu.Game.dll</HintPath>
     </Reference>
     <Reference Include="osu.Game.Rulesets.Catch">
-      <HintPath>..\..\..\..\..\AppData\Local\osulazer\app-2020.1031.0\osu.Game.Rulesets.Catch.dll</HintPath>
+      <HintPath>..\DLLs\osu.Game.Rulesets.Catch.dll</HintPath>
     </Reference>
   </ItemGroup>
 

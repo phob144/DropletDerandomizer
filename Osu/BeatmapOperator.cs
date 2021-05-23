@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
@@ -48,14 +48,14 @@ namespace DropletDerandomizer.Osu
                 {
                     var catchObj = nested as CatchHitObject;
 
-                    // using reflection, because peppy is trying to hide his sins by making xOffset internal
-                    double xOffset = (float)typeof(CatchHitObject).GetProperty("XOffset", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(catchObj);
+                    // effectiveX => after xOffset is applied
+                    double xOffset = catchObj.EffectiveX - catchObj.OriginalX;
 
                     sliderInfo.NestedObjects.Add(new NestedObjectInfo
                     {
                         // subtracting xOffset for the first time returns the x position on the original slider path at this time
                         // subtracting it for the second time with derandomizationRate applied moves the droplet closer to the original slider's path
-                        X = catchObj.X - xOffset - xOffset * derandomizationRate / 20,
+                        X = catchObj.OriginalX - xOffset * derandomizationRate / 20,
                         StartTime = catchObj.StartTime
                     });
                 }
